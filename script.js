@@ -190,11 +190,149 @@ let score2 = 0;
 let drawScrore2 = function(){
     ctx.font = "30px Courier";
     ctx.fillStyle = "Red";
-    ctx.textAlign = "left";
+    ctx.textAlign = "right";
     ctx.textBaseline = "top";
-    ctx.fillText("Раxунок:" + score2, blockSize, blockSize);
+    ctx.fillText("Раxунок:" + score2, width - blockSize, blockSize);
 };
 
+
+Block.prototype.drawSquare2 = function(color){
+    let x = this.col * blockSize;
+    let y = this.row * blockSize;
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, blockSize, blockSize);
+};
+
+
+
+Block.prototype.drawCircle2 = function(color){
+    let centerX = this.col * blockSize + blockSize / 2;
+    let centerY = this.row * blockSize + blockSize / 2;
+    ctx.fillStyle = color;
+    circle(centerX, centerY, blockSize / 2, true);
+};
+
+
+Block.prototype.equal2 = function(otherBlock){
+    return this.col === otherBlock.col && this.row === otherBlock.row;
+};
+
+let Snake2 = function(){
+    this.segments2 = [
+        new Block(27, 25),
+        new Block(26, 25),
+        new Block(25, 25)
+    ];
+    this.direction = "right";
+    this.nextDirection = "right";
+};
+
+
+Snake2.prototype.draw = function(){
+    for (let i = 0; i < this.segments.length; i++){
+        this.segments2[i].drawSquare("Red");
+    }
+};
+
+
+Snake2.prototype.move = function(){
+    let head2 = this.segments2[0];
+    let newHead2;
+
+    this.direction2 = this.nextDirection2;
+
+    if(this.direction2 === "right"){
+    newHead2 = new Block(head2.col + 1, head2.row);
+    } else if (this.direction2 === "down"){
+        newHead2 = new Block(head2.col, head2.row + 1);
+    } else if (this.direction2 === "left"){
+        newHead2 = new Block(head2.col - 1, head2.row);
+    } else if (this.direction2 === "up"){
+        newHead2 = new Block(head2.col, head2.row - 1);
+    } 
+
+    if(this.checkCollision2(newHead2)){
+        gameOver();
+        return;
+    }
+
+    this.segments2.unshift(newHead2);
+
+    if(newHead2.equal2(apple2.position)){
+        score++;
+        apple2.move();
+    } else {
+        this.segments2.pop();
+    }
+};
+
+
+Snake2.prototype.checkCollision2 = function(head2){
+    let leftCollision2 = (head2.col === 0);
+    let topCollision2 = (head2.row === 0);
+    let rightCollision2 = (head2.col === widthInBlock - 1);
+    let bottomCollision2 = (head2.row === heightInBlock - 1);
+    
+    let wallColision2 = leftCollision2 || topCollision2 || rightCollision2 || bottomCollision2;
+
+    let selfCollision2 = false;
+
+    for(let i = 0; i < this.segments2.length; i++){
+        if(head2.equal2(this.segments[i])){
+            selfCollision2 = true;
+        }
+    }
+
+    return wallColision2 || selfCollision2;
+};
+
+Snake2.prototype.setDirection2 = function(newDirection2){
+    if(this.direction2 === "up" && newDirection2 === "down"){
+        return;
+    } else if(this.direction2 === "right" && newDirection2 === "left"){
+        return;
+    } else if(this.direction2 === "down" && newDirection2 === "up"){
+        return;
+    } else if(this.direction2 === "left" && newDirection2 === "right"){
+        return;
+    }
+
+    this.nextDirection2 = newDirection2;
+};
+
+//smt
+
+
+let directions2 = {
+    65: "left",
+    87: "up",
+    68: "right",
+    83: "down"
+};
+
+$("body").keydown(function(event){
+    let newDirection2 = directions2[event.keyCode];
+    if(newDirection2 !== undefined){
+        snake2.setDirection2(newDirection2);
+    }
+});
+
+let Apple2 = function(){
+    this.position2 = new Block(20, 30);
+};
+
+Apple2.prototype.draw = function(){
+    this.position2.drawCircle("Red");
+};
+
+Apple2.prototype.move = function(){
+    let randomCol = Math.floor(Math.random() * (widthInBlock - 2)) + 1;
+    let randomRow = Math.floor(Math.random() * (heightInBlock - 2)) + 1;
+    this.position2 = new Block(randomCol, randomRow);
+};
+
+let snake2 = new Snake();
+let apple2 = new Apple();
 
 
 
@@ -210,3 +348,4 @@ let setIntervalId = setInterval(function(){
     snake.draw();
     apple.draw();
 }, 100);
+
