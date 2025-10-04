@@ -51,7 +51,7 @@ Block.prototype.drawCircle = function(color){
     let centerX = this.col * blockSize + blockSize / 2;
     let centerY = this.row * blockSize + blockSize / 2;
     ctx.fillStyle = color;
-    circle(centerX, centerY, blockSize / 2, true);
+    this.circle(centerX, centerY, blockSize / 2, color);
 };
 
  // маювання функції circle
@@ -59,7 +59,7 @@ let circle = function(x, y, radius, color){
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.fillStyle = color;
-    ctx.stroke();
+    ctx.fill();
 };
 
 Block.prototype.equal = function(otherBlock){
@@ -185,3 +185,4 @@ let setIntervalId = setInterval(function(){
     snake.draw();
     apple.draw();
 }, 100);
+
