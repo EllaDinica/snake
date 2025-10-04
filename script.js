@@ -4,10 +4,13 @@ let ctx = canvas.getContext("2d");
 let width = canvas.width;
 let height = canvas.height;
 
-let blockSize = 10;
+let blockSize = 20;
 let widthInBlock = width / blockSize;
 let heightInBlock = height / blockSize;
 
+
+
+//first
 let score = 0;
 
 let drawBorder = function(){
@@ -19,8 +22,8 @@ let drawBorder = function(){
 };
 
 let drawScrore = function(){
-    ctx.font = "20px Courier";
-    ctx.fillStyle = "navy";
+    ctx.font = "30px Courier";
+    ctx.fillStyle = "LimeGreen";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.fillText("Раxунок:" + score, blockSize, blockSize);
@@ -51,7 +54,7 @@ Block.prototype.drawCircle = function(color){
     let centerX = this.col * blockSize + blockSize / 2;
     let centerY = this.row * blockSize + blockSize / 2;
     ctx.fillStyle = color;
-    this.circle(centerX, centerY, blockSize / 2, color);
+    circle(centerX, centerY, blockSize / 2, true);
 };
 
  // маювання функції circle
@@ -78,7 +81,7 @@ let Snake = function(){
 
 Snake.prototype.draw = function(){
     for (let i = 0; i < this.segments.length; i++){
-        this.segments[i].drawSquare("Blue");
+        this.segments[i].drawSquare("LimeGreen");
     }
 };
 
@@ -161,7 +164,7 @@ $("body").keydown(function(event){
 });
 
 let Apple = function(){
-    this.position = new Block(10, 10);
+    this.position = new Block(20, 30);
 };
 
 Apple.prototype.draw = function(){
@@ -177,12 +180,33 @@ Apple.prototype.move = function(){
 let snake = new Snake();
 let apple = new Apple();
 
+
+
+
+//second
+
+let score2 = 0;
+
+let drawScrore2 = function(){
+    ctx.font = "30px Courier";
+    ctx.fillStyle = "Red";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    ctx.fillText("Раxунок:" + score2, blockSize, blockSize);
+};
+
+
+
+
+
+
+
 let setIntervalId = setInterval(function(){
     ctx.clearRect(0, 0, width, height);
     drawBorder();
     drawScrore();
+    drawScrore2();
     snake.move();
     snake.draw();
     apple.draw();
 }, 100);
-
